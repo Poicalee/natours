@@ -23,6 +23,9 @@ app.use((req, res, next) => {
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`),
 );
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/users.json`),
+);
 
 const getTour = (req, res) => {
   const id = req.params.id * 1;
@@ -126,6 +129,51 @@ const deleteTour = (req, res) => {
   );
 };
 
+const getAllUsers = (req, res) => {
+  res.status(200).json({
+    status: 'succes',
+    result: users.length,
+    data: {
+      users,
+    },
+  });
+};
+
+const getUser = (req, res) => {
+  const id = req.params.id * 1;
+  const user = users.find((el) => el.id === id);
+  if (!user) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid id',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined!',
+  });
+};
+const updatedUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined!',
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined!',
+  });
+};
 // 3) Routes
 // app.get('/api/v1/tours', getAllTours);
 // app.get('/api/v1/tours/:id', getTour);
@@ -138,6 +186,10 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+
+app.route('api/v1/user/:id').get(getUser).patch(updatedUser).delete(deleteUser);
 // 4) server listen
 const port = 3000;
 app.listen(port, () => {
